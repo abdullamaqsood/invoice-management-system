@@ -87,7 +87,7 @@ requests
 
 #### 🔹 Add `.env` File
 
-Add `.env` file in the backend root directory.
+Add `.env` file sent through email in the backend root directory.
 
 #### 🔹 Run the Server
 
