@@ -13,6 +13,7 @@
 * User registration and login
 * Role-based access: `admin` and `viewer`
 * JWT-based secure session management
+* All newly registered users are automatically assigned the `viewer` role by default
 
 ### 📄 Invoices
 
