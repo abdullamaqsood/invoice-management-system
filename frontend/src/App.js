@@ -1,4 +1,3 @@
-// App.jsx
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
@@ -7,8 +6,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import AddVendor from './pages/AddVendor';
 import AddInvoice from './pages/AddInvoice';
-import Settings from './pages/Settings';
-import Auth from './pages/Auth';
+import VendorManagement from './pages/VendorManagement';
 
 import { isAuthenticated, getUserRole } from './services/auth';
 
@@ -27,7 +25,7 @@ export default function App() {
         {/* Public Routes */}
         <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        {/* <Route path="/" element={<Auth />} /> */}
+
         {/* Authenticated Routes */}
         <Route
           path="/dashboard"
@@ -37,6 +35,16 @@ export default function App() {
             </PrivateRoute>
           }
         />
+
+        <Route
+          path="/vendors"
+          element={
+            <PrivateRoute>
+              <VendorManagement />
+            </PrivateRoute>
+          }
+        />
+
         <Route
           path="/add-vendor"
           element={
@@ -54,14 +62,6 @@ export default function App() {
               <AdminRoute>
                 <AddInvoice />
               </AdminRoute>
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/settings"
-          element={
-            <PrivateRoute>
-              <Settings />
             </PrivateRoute>
           }
         />

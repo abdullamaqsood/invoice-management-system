@@ -1,4 +1,3 @@
-// pages/Register.jsx
 import React, { useState } from 'react';
 import {
   Container, TextField, Button, Typography, Box, Paper,
@@ -15,9 +14,19 @@ export default function Register() {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = async () => {
+    if (!validateEmail(form.email)) {
+      enqueueSnackbar('Please enter a valid email address.', { variant: 'warning' });
+      return;
+    }
+
     try {
-      const res = await fetch('http://localhost:8000/api/auth/register/', {
+      const res = await fetch('https://invoice-management-system-production-40bc.up.railway.app/api/auth/register/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),

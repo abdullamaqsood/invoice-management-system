@@ -29,7 +29,22 @@ export default function AddInvoice() {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  const validateForm = () => {
+    const { vendor, invoice_number, amount, issue_date, due_date } = form;
+    if (!vendor || !invoice_number || !amount || !issue_date || !due_date) {
+      enqueueSnackbar('Please fill in all required fields.', { variant: 'warning' });
+      return false;
+    }
+    if (!file) {
+      enqueueSnackbar('Please upload an invoice file.', { variant: 'warning' });
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async () => {
+    if (!validateForm()) return;
+
     const data = new FormData();
     const vendorObj = vendors.find(v => v.id === parseInt(form.vendor));
     const fileExt = file?.name.split('.').pop();
@@ -66,8 +81,8 @@ export default function AddInvoice() {
           </Box>
 
           <TextField
-            select fullWidth name="vendor" label="Vendor"
-            margin="normal" onChange={handleChange}
+            select fullWidth required name="vendor" label="Vendor"
+            margin="normal" value={form.vendor} onChange={handleChange}
           >
             {vendors.map((v) => (
               <MenuItem key={v.id} value={v.id}>{v.name}</MenuItem>
@@ -75,25 +90,25 @@ export default function AddInvoice() {
           </TextField>
 
           <TextField
-            fullWidth name="invoice_number" label="Invoice #"
-            margin="normal" onChange={handleChange}
+            fullWidth required name="invoice_number" label="Invoice #"
+            margin="normal" value={form.invoice_number} onChange={handleChange}
           />
 
           <TextField
-            fullWidth name="amount" label="Amount" type="number"
-            margin="normal" onChange={handleChange}
+            fullWidth required name="amount" label="Amount" type="number"
+            margin="normal" value={form.amount} onChange={handleChange}
           />
 
           <TextField
-            fullWidth name="issue_date" type="date"
+            fullWidth required name="issue_date" type="date"
             label="Issue Date" InputLabelProps={{ shrink: true }}
-            margin="normal" onChange={handleChange}
+            margin="normal" value={form.issue_date} onChange={handleChange}
           />
 
           <TextField
-            fullWidth name="due_date" type="date"
+            fullWidth required name="due_date" type="date"
             label="Due Date" InputLabelProps={{ shrink: true }}
-            margin="normal" onChange={handleChange}
+            margin="normal" value={form.due_date} onChange={handleChange}
           />
 
           <TextField
@@ -105,14 +120,15 @@ export default function AddInvoice() {
             ))}
           </TextField>
 
-          <input
-            type="file"
-            accept="application/pdf,image/*"
-            onChange={(e) => setFile(e.target.files[0])}
-            style={{ marginTop: 16 }}
-          />
-
           <Box mt={2}>
+            <input
+              type="file"
+              accept="application/pdf,image/*"
+              onChange={(e) => setFile(e.target.files[0])}
+            />
+          </Box>
+
+          <Box mt={3}>
             <Button variant="contained" onClick={handleSubmit}>
               Upload Invoice
             </Button>

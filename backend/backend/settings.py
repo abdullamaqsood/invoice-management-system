@@ -14,7 +14,7 @@ from pathlib import Path
 import os
 import dj_database_url
 from dotenv import load_dotenv
-load_dotenv()  # load .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +29,9 @@ SECRET_KEY = 'django-insecure-4@3*kak@r4ga&c+u=d=-rjew=dii)#4z)e9q43fz6ux0byo0ss
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['invoice-management-system-8wlm.onrender.com', 'invoice-management-system-production-40bc.up.railway.app', 'localhost', '127.0.0.1']
+AUTH_USER_MODEL = 'api.User'
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 # Application definition
@@ -52,8 +54,6 @@ REST_FRAMEWORK = {
     )
 }
 
-AUTH_USER_MODEL = 'api.User'
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -64,8 +64,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware'
 ]
-CORS_ALLOW_ALL_ORIGINS = True  # For development only
-ALLOWED_HOSTS = ['invoice-management-system-8wlm.onrender.com', 'invoice-management-system-production-40bc.up.railway.app', 'localhost', '127.0.0.1']
+
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [

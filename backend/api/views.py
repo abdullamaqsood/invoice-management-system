@@ -1,5 +1,3 @@
-# api/views.py
-
 import os
 import requests
 from rest_framework import viewsets, status

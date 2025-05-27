@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import {
   Box, Typography, Grid, Paper, Button, TextField,
-  MenuItem, Toolbar, IconButton
+  MenuItem, Toolbar, IconButton, Dialog, DialogTitle,
+  DialogContent, DialogActions
 } from '@mui/material';
 import Topbar from '../components/Topbar';
 import API from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DescriptionIcon from '@mui/icons-material/Description';
+import EditIcon from '@mui/icons-material/Edit';
 import { useSnackbar } from 'notistack';
 
 export default function Dashboard() {
@@ -18,6 +20,8 @@ export default function Dashboard() {
   const [filterVendor, setFilterVendor] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -79,6 +83,36 @@ export default function Dashboard() {
     setEndDate('');
   };
 
+  const handleEdit = (invoice) => {
+    setSelectedInvoice({ ...invoice });
+    setEditDialogOpen(true);
+  };
+
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedInvoice((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleEditSubmit = async () => {
+    const amountValue = parseFloat(selectedInvoice.amount);
+    if (isNaN(amountValue)) {
+      enqueueSnackbar('Amount must be a valid number', { variant: 'warning' });
+      return;
+    }
+
+    try {
+      await API.patch(`invoices/${selectedInvoice.id}/`, {
+        ...selectedInvoice,
+        amount: amountValue
+      });
+      enqueueSnackbar('Invoice updated successfully', { variant: 'success' });
+      setEditDialogOpen(false);
+      fetchData();
+    } catch {
+      enqueueSnackbar('Failed to update invoice', { variant: 'error' });
+    }
+  };
+
   return (
     <Box>
       <Topbar />
@@ -121,7 +155,6 @@ export default function Dashboard() {
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
           />
-
           <TextField
             label="End Date" type="date" InputLabelProps={{ shrink: true }}
             value={endDate}
@@ -189,6 +222,7 @@ export default function Dashboard() {
                     </td>
                     {isAdmin && (
                       <td style={tdStyle}>
+                        <IconButton onClick={() => handleEdit(inv)}><EditIcon /></IconButton>
                         <IconButton onClick={() => handleDelete(inv.id)} color="error">
                           <DeleteIcon />
                         </IconButton>
@@ -205,6 +239,40 @@ export default function Dashboard() {
             </tbody>
           </table>
         </Paper>
+
+        {/* Edit Invoice Dialog */}
+        <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
+          <DialogTitle>Edit Invoice</DialogTitle>
+          <DialogContent>
+            <TextField
+              fullWidth label="Invoice #" name="invoice_number" margin="dense"
+              value={selectedInvoice?.invoice_number || ''} disabled
+            />
+            <TextField
+              fullWidth label="Amount" name="amount" type="number" margin="dense"
+              inputProps={{ step: '0.01', min: '0' }}
+              value={selectedInvoice?.amount || ''}
+              onChange={handleEditChange}
+            />
+            <TextField
+              fullWidth label="Due Date" name="due_date" type="date" margin="dense"
+              InputLabelProps={{ shrink: true }}
+              value={selectedInvoice?.due_date || ''} onChange={handleEditChange}
+            />
+            <TextField
+              select fullWidth label="Status" name="status" margin="dense"
+              value={selectedInvoice?.status || ''} onChange={handleEditChange}
+            >
+              <MenuItem value="Pending">Pending</MenuItem>
+              <MenuItem value="Paid">Paid</MenuItem>
+              <MenuItem value="Overdue">Overdue</MenuItem>
+            </TextField>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setEditDialogOpen(false)}>Cancel</Button>
+            <Button variant="contained" onClick={handleEditSubmit}>Update</Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </Box>
   );

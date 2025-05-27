@@ -1,6 +1,6 @@
 // auth.js
 export const login = async (username, password) => {
-  const res = await fetch('http://localhost:8000/api/auth/login/', {
+  const res = await fetch('https://invoice-management-system-production-40bc.up.railway.app/api/auth/login/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password }),
@@ -10,7 +10,7 @@ export const login = async (username, password) => {
   const data = await res.json();
 
   // Optional: Get user role after login
-  const userRes = await fetch('http://localhost:8000/api/users/', {
+  const userRes = await fetch('https://invoice-management-system-production-40bc.up.railway.app/api/users/', {
     headers: { Authorization: `Bearer ${data.access}` },
   });
   const users = await userRes.json();

@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   AppBar, Toolbar, Typography, IconButton, Menu, MenuItem,
-  Avatar, Box
+  Avatar, Box, Button
 } from '@mui/material';
 import { logout } from '../services/auth';
 import { useNavigate } from 'react-router-dom';
@@ -21,13 +21,21 @@ const Topbar = () => {
   return (
     <AppBar position="fixed" color="primary">
       <Toolbar sx={{ justifyContent: 'space-between' }}>
-        <Typography
-          variant="h6"
-          sx={{ cursor: 'pointer', fontWeight: 600 }}
-          onClick={() => navigate('/dashboard')}
-        >
-          InvoiceFlow
-        </Typography>
+        <Box display="flex" alignItems="center" gap={2}>
+          <Typography
+            variant="h6"
+            sx={{ cursor: 'pointer', fontWeight: 600 }}
+            onClick={() => navigate('/dashboard')}
+          >
+            InvoiceFlow
+          </Typography>
+          <Button color="inherit" onClick={() => navigate('/dashboard')}>
+            Dashboard
+          </Button>
+          <Button color="inherit" onClick={() => navigate('/vendors')}>
+            Vendors
+          </Button>
+        </Box>
 
         <Box display="flex" alignItems="center">
           <Typography mr={2}>{user.username} ({user.role})</Typography>

@@ -17,7 +17,27 @@ export default function AddVendor() {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateForm = () => {
+    const { name, email, phone, address } = form;
+    if (!name || !email || !phone || !address) {
+      enqueueSnackbar('Please fill in all required fields.', { variant: 'warning' });
+      return false;
+    }
+    if (!isValidEmail(email)) {
+      enqueueSnackbar('Please enter a valid email address.', { variant: 'warning' });
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async () => {
+    if (!validateForm()) return;
+
     try {
       await API.post('vendors/', form);
       enqueueSnackbar('Vendor added successfully', { variant: 'success' });
@@ -40,20 +60,20 @@ export default function AddVendor() {
           </Box>
 
           <TextField
-            fullWidth label="Name" name="name"
-            margin="normal" onChange={handleChange}
+            fullWidth required label="Name" name="name"
+            margin="normal" value={form.name} onChange={handleChange}
           />
           <TextField
-            fullWidth label="Email" name="email"
-            margin="normal" onChange={handleChange}
+            fullWidth required label="Email" name="email"
+            margin="normal" value={form.email} onChange={handleChange}
           />
           <TextField
-            fullWidth label="Phone" name="phone"
-            margin="normal" onChange={handleChange}
+            fullWidth required label="Phone" name="phone"
+            margin="normal" value={form.phone} onChange={handleChange}
           />
           <TextField
-            fullWidth label="Address" name="address"
-            margin="normal" onChange={handleChange}
+            fullWidth required label="Address" name="address"
+            margin="normal" value={form.address} onChange={handleChange}
           />
 
           <Box mt={2}>

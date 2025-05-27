@@ -1,6 +1,4 @@
-# === Global Rules ===
-
-# OS-specific
+# OS generated files
 .DS_Store
 Thumbs.db
 
@@ -14,7 +12,7 @@ yarn-error.log*
 .env
 .env.*.local
 
-# === Frontend ===
+# Frontend
 /frontend/node_modules/
 /frontend/.pnp/
 /frontend/pnp.js
@@ -22,21 +20,11 @@ yarn-error.log*
 /frontend/coverage/
 /frontend/build/
 
-# === Backend ===
+# Backend
 /backend/__pycache__/
 /backend/*.pyc
 
-# Optional: Python virtual environment
-/backend/venv/
-/backend/.venv/
-
-# === General tools ===
-# Ignore IDE/editor files
+# IDE/editor files
 .vscode/
 .idea/
 *.swp
-
-# === Dependency installs ===
-# Lock files can be kept or ignored based on team policy
-# /frontend/package-lock.json
-# /frontend/yarn.lock
