@@ -1,3 +1,4 @@
+--upgrade pip
 Django
 djangorestframework
 djangorestframework-simplejwt
@@ -5,4 +6,4 @@ gunicorn
 python-dotenv
 psycopg2-binary
 Pillow
-corsheaders
+django-cors-headers
