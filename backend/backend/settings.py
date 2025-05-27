@@ -65,7 +65,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware'
 ]
 CORS_ALLOW_ALL_ORIGINS = True  # For development only
-ALLOWED_HOSTS = ['invoice-management-system-8wlm.onrender.com', 'https://invoice-management-system-production-40bc.up.railway.app/', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['invoice-management-system-8wlm.onrender.com', 'invoice-management-system-production-40bc.up.railway.app', 'localhost', '127.0.0.1']
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
