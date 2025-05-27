@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
   Container, Typography, Paper, IconButton,
-  Table, TableHead, TableRow, TableCell, TableBody,
   Button, Box, Dialog, DialogTitle, DialogContent,
   DialogActions, TextField, CircularProgress
 } from '@mui/material';
@@ -82,6 +81,17 @@ export default function VendorManagement() {
 
   const isAdmin = user?.role === 'admin';
 
+  const thStyle = {
+    textAlign: 'left',
+    padding: '12px',
+    borderBottom: '1px solid #ccc'
+  };
+
+  const tdStyle = {
+    padding: '12px',
+    borderBottom: '1px solid #eee'
+  };
+
   return (
     <>
       <Topbar />
@@ -100,45 +110,44 @@ export default function VendorManagement() {
             <CircularProgress />
           </Box>
         ) : (
-          <Paper>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Phone</TableCell>
-                  <TableCell>Address</TableCell>
-                  {isAdmin && <TableCell align="right">Actions</TableCell>}
-                </TableRow>
-              </TableHead>
-              <TableBody>
+          <Paper sx={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead style={{ background: '#f4f4f4' }}>
+                <tr>
+                  <th style={thStyle}>Name</th>
+                  <th style={thStyle}>Email</th>
+                  <th style={thStyle}>Phone</th>
+                  <th style={thStyle}>Address</th>
+                  {isAdmin && <th style={thStyle} align="right">Actions</th>}
+                </tr>
+              </thead>
+              <tbody>
                 {vendors.map((v) => (
-                  <TableRow key={v.id}>
-                    <TableCell>{v.name}</TableCell>
-                    <TableCell>{v.email}</TableCell>
-                    <TableCell>{v.phone}</TableCell>
-                    <TableCell>{v.address}</TableCell>
+                  <tr key={v.id}>
+                    <td style={tdStyle}>{v.name}</td>
+                    <td style={tdStyle}>{v.email}</td>
+                    <td style={tdStyle}>{v.phone}</td>
+                    <td style={tdStyle}>{v.address}</td>
                     {isAdmin && (
-                      <TableCell align="right">
+                      <td style={tdStyle} align="right">
                         <IconButton onClick={() => handleEdit(v)}><EditIcon /></IconButton>
                         <IconButton color="error" onClick={() => handleDelete(v.id)}><DeleteIcon /></IconButton>
-                      </TableCell>
+                      </td>
                     )}
-                  </TableRow>
+                  </tr>
                 ))}
                 {vendors.length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={isAdmin ? 5 : 4} align="center">
+                  <tr>
+                    <td colSpan={isAdmin ? 5 : 4} style={tdStyle} align="center">
                       No vendors found
-                    </TableCell>
-                  </TableRow>
+                    </td>
+                  </tr>
                 )}
-              </TableBody>
-            </Table>
+              </tbody>
+            </table>
           </Paper>
         )}
 
-        {/* Edit Dialog */}
         <Dialog open={open} onClose={() => setOpen(false)}>
           <DialogTitle>Edit Vendor</DialogTitle>
           <DialogContent>
