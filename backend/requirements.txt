@@ -1,4 +1,3 @@
---upgrade pip
 Django
 djangorestframework
 djangorestframework-simplejwt
