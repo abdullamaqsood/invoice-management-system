@@ -240,7 +240,6 @@ export default function Dashboard() {
           </table>
         </Paper>
 
-        {/* Edit Invoice Dialog */}
         <Dialog open={editDialogOpen} onClose={() => setEditDialogOpen(false)}>
           <DialogTitle>Edit Invoice</DialogTitle>
           <DialogContent>

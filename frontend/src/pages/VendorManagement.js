@@ -52,7 +52,6 @@ export default function VendorManagement() {
   };
 
   const handleUpdate = async () => {
-    // Validate email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(form.email)) {
       setEmailError('Please enter a valid email address');
@@ -121,7 +120,6 @@ export default function VendorManagement() {
           </Table>
         </Paper>
 
-        {/* Edit Dialog */}
         <Dialog open={open} onClose={() => setOpen(false)}>
           <DialogTitle>Edit Vendor</DialogTitle>
           <DialogContent>

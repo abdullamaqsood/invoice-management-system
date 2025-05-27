@@ -32,12 +32,11 @@ class InvoiceViewSet(viewsets.ModelViewSet):
             if file:
                 file_url = self.upload_to_supabase(file)
                 if file_url:
-                    request.data._mutable = True  # Only needed in older Django versions
+                    request.data._mutable = True
                     request.data['file_url'] = file_url
                 else:
                     return Response({'error': 'File upload failed'}, status=500)
 
-            # Add this to inspect validation issues
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=False)
 
