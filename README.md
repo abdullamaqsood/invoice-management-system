@@ -136,12 +136,6 @@ Username: viewer
 Password: 123456
 ```
 
-
-## 🎥 Demo
-
-📺 [Watch Demo Video](https://your-demo-video-link.com)
-
-
 ## 🖼️ Sample Files
 
 * Sample invoice **image** and **PDF** are included in the repository under `/samples`
