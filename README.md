@@ -3,7 +3,6 @@
 **InvoiceFlow** is a full-stack invoice management system built using **React** for the frontend and **Django REST Framework** for the backend. It supports user authentication, invoice and vendor management, file uploads, role-based access control, and powerful filtering options.
 
 
-
 ## 🔧 Features
 
 ### ✅ Authentication
@@ -31,18 +30,19 @@
 
 ### 🧑 Role-Based Permissions
 
-* Admin: Full CRUD access to vendors and invoices
-* Viewer: Read-only access
+* **Admin**: Full CRUD access to vendors and invoices
+* **Viewer**: Read-only access
+
 
 
 ## 🖥️ Tech Stack
 
-| Layer    | Technology                                 |
-| -------- | ------------------------------------------ |
-| Frontend | React + MUI + React Router                 |
-| Backend  | Django + Django REST Framework             |
-| Auth     | JWT Authentication                         |
-| Database | Supabase |
+| Layer    | Technology                     |
+| -------- | ------------------------------ |
+| Frontend | React + MUI + React Router     |
+| Backend  | Django + Django REST Framework |
+| Auth     | JWT Authentication             |
+| Database | Supabase                       |
 
 
 ## 🚀 Getting Started
@@ -51,13 +51,16 @@
 
 #### 🔹 Requirements
 
-Make sure Python 3.8+ is installed.
+* Python 3.8+
+* Pip (Python package manager)
 
-Navigate to the backend folder:
+Navigate to the `backend` folder:
+
+```bash
+cd backend
+```
+
 #### 🔹 Install Dependencies
-
-
-Install packages:
 
 ```bash
 pip install -r requirements.txt
@@ -78,7 +81,11 @@ dj-database-url
 requests
 ```
 
-#### 🔹 Run the server
+#### 🔹 Add `.env` File
+
+Add `.env` file in the backend root directory.
+
+#### 🔹 Run the Server
 
 ```bash
 python manage.py makemigrations
@@ -86,11 +93,17 @@ python manage.py migrate
 python manage.py runserver
 ```
 
+---
+
 ### 2. Frontend Setup
 
-#### 🔹 Install Node Modules
+Navigate to the `frontend` folder:
 
-Navigate to the frontend folder and run:
+```bash
+cd frontend
+```
+
+#### 🔹 Install Node Modules
 
 ```bash
 npm install
@@ -102,6 +115,36 @@ npm install
 npm start
 ```
 
+---
+
+## 👥 Test Credentials
+
+Use the following test users to explore the app:
+
+### Admin
+
+```txt
+Username: admin  
+Password: 123456
+```
+
+### Viewer
+
+```txt
+Username: viewer  
+Password: 123456
+```
+
+
+## 🎥 Demo
+
+📺 [Watch Demo Video](https://your-demo-video-link.com)
+
+
+## 🖼️ Sample Files
+
+* Sample invoice **image** and **PDF** are included in the repository under `/samples`
+* Use them when uploading invoices during testing
 
 
 ## 🔐 User Roles
@@ -146,5 +189,6 @@ npm start
 * Email validation for vendor inputs
 * Amount and due date validations
 * Required fields check
+* File upload validation (PDF/image only)
 
 
