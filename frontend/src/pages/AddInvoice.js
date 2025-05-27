@@ -31,14 +31,24 @@ export default function AddInvoice() {
 
   const validateForm = () => {
     const { vendor, invoice_number, amount, issue_date, due_date } = form;
+
     if (!vendor || !invoice_number || !amount || !issue_date || !due_date) {
       enqueueSnackbar('Please fill in all required fields.', { variant: 'warning' });
       return false;
     }
+
     if (!file) {
       enqueueSnackbar('Please upload an invoice file.', { variant: 'warning' });
       return false;
     }
+
+    const issue = new Date(issue_date);
+    const due = new Date(due_date);
+    if (due <= issue) {
+      enqueueSnackbar('Due date must be after issue date.', { variant: 'warning' });
+      return false;
+    }
+
     return true;
   };
 

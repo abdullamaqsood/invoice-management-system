@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
   Container, Typography, Paper, IconButton,
-  Table, TableHead, TableRow, TableCell, TableBody, Button, Box, Dialog,
-  DialogTitle, DialogContent, DialogActions, TextField
+  Table, TableHead, TableRow, TableCell, TableBody,
+  Button, Box, Dialog, DialogTitle, DialogContent,
+  DialogActions, TextField, CircularProgress
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -17,20 +18,29 @@ export default function VendorManagement() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', address: '' });
   const [open, setOpen] = useState(false);
   const [emailError, setEmailError] = useState('');
+  const [loading, setLoading] = useState(true);
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
   const [user, setUser] = useState({});
 
   useEffect(() => {
+    const fetchVendors = async () => {
+      setLoading(true);
+      try {
+        const res = await API.get('vendors/');
+        setVendors(res.data);
+      } catch {
+        enqueueSnackbar('Session expired', { variant: 'error' });
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchVendors();
+
     const storedUser = JSON.parse(localStorage.getItem('user'));
     if (storedUser) setUser(storedUser);
-  }, []);
-
-  const fetchVendors = async () => {
-    const res = await API.get('vendors/');
-    setVendors(res.data);
-  };
+  }, [enqueueSnackbar]);
 
   const handleEdit = (vendor) => {
     setEditingVendor(vendor);
@@ -43,7 +53,8 @@ export default function VendorManagement() {
     if (window.confirm('Are you sure you want to delete this vendor?')) {
       try {
         await API.delete(`vendors/${id}/`);
-        fetchVendors();
+        const updated = await API.get('vendors/');
+        setVendors(updated.data);
         enqueueSnackbar('Vendor deleted successfully', { variant: 'success' });
       } catch {
         enqueueSnackbar('Failed to delete vendor', { variant: 'error' });
@@ -61,8 +72,9 @@ export default function VendorManagement() {
     try {
       await API.put(`vendors/${editingVendor.id}/`, form);
       enqueueSnackbar('Vendor updated', { variant: 'success' });
+      const refreshed = await API.get('vendors/');
+      setVendors(refreshed.data);
       setOpen(false);
-      fetchVendors();
     } catch {
       enqueueSnackbar('Update failed', { variant: 'error' });
     }
@@ -83,63 +95,74 @@ export default function VendorManagement() {
           )}
         </Box>
 
-        <Paper>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Phone</TableCell>
-                <TableCell>Address</TableCell>
-                {isAdmin && <TableCell align="right">Actions</TableCell>}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {vendors.map((v) => (
-                <TableRow key={v.id}>
-                  <TableCell>{v.name}</TableCell>
-                  <TableCell>{v.email}</TableCell>
-                  <TableCell>{v.phone}</TableCell>
-                  <TableCell>{v.address}</TableCell>
-                  {isAdmin && (
-                    <TableCell align="right">
-                      <IconButton onClick={() => handleEdit(v)}><EditIcon /></IconButton>
-                      <IconButton color="error" onClick={() => handleDelete(v.id)}><DeleteIcon /></IconButton>
-                    </TableCell>
-                  )}
-                </TableRow>
-              ))}
-              {vendors.length === 0 && (
+        {loading ? (
+          <Box display="flex" justifyContent="center" mt={5}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Paper>
+            <Table>
+              <TableHead>
                 <TableRow>
-                  <TableCell colSpan={isAdmin ? 5 : 4} align="center">
-                    No vendors found
-                  </TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Email</TableCell>
+                  <TableCell>Phone</TableCell>
+                  <TableCell>Address</TableCell>
+                  {isAdmin && <TableCell align="right">Actions</TableCell>}
                 </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </Paper>
+              </TableHead>
+              <TableBody>
+                {vendors.map((v) => (
+                  <TableRow key={v.id}>
+                    <TableCell>{v.name}</TableCell>
+                    <TableCell>{v.email}</TableCell>
+                    <TableCell>{v.phone}</TableCell>
+                    <TableCell>{v.address}</TableCell>
+                    {isAdmin && (
+                      <TableCell align="right">
+                        <IconButton onClick={() => handleEdit(v)}><EditIcon /></IconButton>
+                        <IconButton color="error" onClick={() => handleDelete(v.id)}><DeleteIcon /></IconButton>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                ))}
+                {vendors.length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={isAdmin ? 5 : 4} align="center">
+                      No vendors found
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </Paper>
+        )}
 
+        {/* Edit Dialog */}
         <Dialog open={open} onClose={() => setOpen(false)}>
           <DialogTitle>Edit Vendor</DialogTitle>
           <DialogContent>
             <TextField
               fullWidth label="Name" name="name" margin="dense"
-              value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
+              value={form.name}
+              onChange={(e) => setForm({ ...form, name: e.target.value })}
             />
             <TextField
               fullWidth label="Email" name="email" margin="dense"
-              value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
+              value={form.email}
+              onChange={(e) => setForm({ ...form, email: e.target.value })}
               error={!!emailError}
               helperText={emailError}
             />
             <TextField
               fullWidth label="Phone" name="phone" margin="dense"
-              value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })}
+              value={form.phone}
+              onChange={(e) => setForm({ ...form, phone: e.target.value })}
             />
             <TextField
               fullWidth label="Address" name="address" margin="dense"
-              value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })}
+              value={form.address}
+              onChange={(e) => setForm({ ...form, address: e.target.value })}
             />
           </DialogContent>
           <DialogActions>
