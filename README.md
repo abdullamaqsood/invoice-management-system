@@ -4,7 +4,7 @@
 
 ## Live Link
 
-📺 [Test the app here](https://invoice-management-system-two.vercel.app/)
+[Test the app here](https://invoice-management-system-two.vercel.app/)
 
 ## 🔧 Features
 
